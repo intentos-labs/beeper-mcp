@@ -23,10 +23,10 @@ A backend service for executing beeper transactions on Binance Smart Chain (BSC)
 Create a `.env` file in the project root with the following variables:
 
 ```env
-MEMBASE_CHAIN=<bsc or bsc-testnet>
-MEMBASE_ACCOUNT=<your-wallet-address>
-MEMBASE_SECRET_KEY=<your-private-key>
-MEMBASE_TARGET_TOKEN=<default-token-address>  # Optional
+BEEPER_CHAIN=<bsc or bsc-testnet>
+BEEPER_ACCOUNT=<your-wallet-address>
+BEEPER_SECRET_KEY=<your-private-key>
+BEEPER_TARGET_TOKEN=<default-token-address>  # Optional
 ```
 
 ## API Endpoints
@@ -77,7 +77,7 @@ uv run src/beeper_mcp/server.py --port 8008 --transport=sse
 ```json
 {
   "mcpServers": {
-    "membase": {
+    "beeper": {
       "command": "uv",
       "args": [
         "--directory",
@@ -86,10 +86,10 @@ uv run src/beeper_mcp/server.py --port 8008 --transport=sse
         "src/beeper_mcp/server.py"
         ],
       "env": {
-        "MEMBASE_ACCOUNT": "your account, 0x...",
-        "MEMBASE_SECRET_KEY": "your private key or in .env",
-        "MEMBASE_TARGET_TOKEN": "default token address",
-        "MEMBASE_CHAIN": "chain type <bsc/bsc-testnet>"
+        "BEEPER_ACCOUNT": "your account, 0x...",
+        "BEEPER_SECRET_KEY": "your private key or in .env",
+        "BEEPER_TARGET_TOKEN": "default token address",
+        "BEEPER_CHAIN": "chain type <bsc/bsc-testnet>"
       }
     }
   }

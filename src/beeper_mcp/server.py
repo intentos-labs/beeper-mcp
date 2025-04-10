@@ -1,15 +1,13 @@
 import argparse
-import asyncio
 import logging
 import os
-import sys
 
 from decimal import ROUND_DOWN, Decimal
 import time
 from dotenv import load_dotenv
 from mcp.server.fastmcp import FastMCP
-from membase.chain.beeper import BeeperClient
-from membase.chain.util import BSC_MAINNET_SETTINGS, BSC_TESTNET_SETTINGS
+from beeper.chain import BeeperClient
+from beeper.util import BSC_MAINNET_SETTINGS, BSC_TESTNET_SETTINGS, format_decimal
 from web3 import Web3
 
 load_dotenv()
@@ -24,49 +22,31 @@ mcp = FastMCP(
     "Beeper MCP Server", port=args.port, debug=True, log_level=args.log_level,
 )
 
-chain = os.getenv("MEMBASE_CHAIN")
-logging.info(f"Chain: {chain}")
+logger = logging.getLogger(__name__)
+
+chain = os.getenv("BEEPER_CHAIN")
+logger.info(f"Beeper chain: {chain}")
 
 if chain == "bsc":
+    default_token_address = os.getenv('BEEPER_TARGET_TOKEN', "0x238950013FA29A3575EB7a3D99C00304047a77b5")
     chain_settings = BSC_MAINNET_SETTINGS
 elif chain == "bsc-testnet":
+    default_token_address = os.getenv('BEEPER_TARGET_TOKEN', "0x2e6b3f12408d5441e56c3C20848A57fd53a78931")
     chain_settings = BSC_TESTNET_SETTINGS
 else:
     raise ValueError(f"Invalid chain: {chain}, must be one of: bsc, bsc-testnet")
 
-wallet_account = os.getenv("MEMBASE_ACCOUNT")
+logger.info(f"Beeper token address: {default_token_address}")
+
+wallet_account = os.getenv("BEEPER_ACCOUNT")
 if not wallet_account:  
-    raise ValueError("MEMBASE_ACCOUNT is not set")
+    raise ValueError("BEEPER_ACCOUNT is not set")
 
-logging.info(f"Wallet account: {wallet_account}")
+logger.info(f"Beeper wallet account: {wallet_account}")
 
-wallet_private_key = os.getenv("MEMBASE_SECRET_KEY")
+wallet_private_key = os.getenv("BEEPER_SECRET_KEY")
 if not wallet_private_key:
-    raise ValueError("MEMBASE_SECRET_KEY is not set")
-
-default_token_address = os.getenv('MEMBASE_TARGET_TOKEN', "0x2e6b3f12408d5441e56c3C20848A57fd53a78931")
-
-def format_decimal(value, decimal_places=8):
-    """
-    Formats a Decimal to a specified number of decimal places,
-    removes trailing zeros, and avoids scientific notation.
-    """
-
-    value = Web3.from_wei(value, 'ether')
-
-    # Ensure input is a Decimal
-    if not isinstance(value, Decimal):
-        value = Decimal(value)
-    
-    # Define the quantization level
-    quantize_level = Decimal(f"1.{'0' * decimal_places}")
-    # Quantize to the required decimal places
-    formatted_value = value.quantize(quantize_level, rounding=ROUND_DOWN)
-    # Convert to string, remove trailing zeros, and avoid scientific notation
-    return f"{formatted_value:.{decimal_places}f}".rstrip("0").rstrip(".")
-
-
-logger = logging.getLogger(__name__)
+    raise ValueError("BEEPER_SECRET_KEY is not set")
 
 bc = BeeperClient(chain_settings, wallet_account, wallet_private_key)
 

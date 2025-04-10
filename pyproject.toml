@@ -5,9 +5,9 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "beeper>=0.1.0",
     "mcp>=1.6.0",
-    "membase>=0.1.8",
 ]
 
 [tool.uv.sources]
-membase = { git = "https://github.com/unibaseio/membase.git" }
+beeper = { git = "https://github.com/intentos-labs/beeper-python.git" }
