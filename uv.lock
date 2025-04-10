@@ -147,29 +147,33 @@ wheels = [
 ]
 
 [[package]]
-name = "beeper"
-version = "0.1.0"
-source = { git = "https://github.com/intentos-labs/beeper-python.git#fe654f888c4d8c95caa1e9ef3a59a3df17a85a4f" }
+name = "beeper-mcp"
+version = "0.1.1"
+source = { virtual = "." }
+dependencies = [
+    { name = "beeper-python" },
+    { name = "mcp" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "beeper-python", specifier = ">=0.1.1" },
+    { name = "mcp", specifier = ">=1.6.0" },
+]
+
+[[package]]
+name = "beeper-python"
+version = "0.1.1"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pytest" },
     { name = "python-dotenv" },
     { name = "requests" },
     { name = "web3" },
 ]
-
-[[package]]
-name = "beeper-mcp"
-version = "0.1.0"
-source = { virtual = "." }
-dependencies = [
-    { name = "beeper" },
-    { name = "mcp" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "beeper", git = "https://github.com/intentos-labs/beeper-python.git" },
-    { name = "mcp", specifier = ">=1.6.0" },
+sdist = { url = "https://files.pythonhosted.org/packages/84/53/e3cc3b634c8c437b43f8f3fc1c70128f34838190b9b66991b9fd6f050758/beeper_python-0.1.1.tar.gz", hash = "sha256:df5f1c50718909bfec8767e68f7f8f5110dead2d0144377154ad1fa0e90d7e60", size = 104895 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/7b/42/d3a429ecdf09b36c5e204519fafb611868fb7038de5447977c5cbb9b0f1c/beeper_python-0.1.1-py3-none-any.whl", hash = "sha256:5a08247f8404bfd0c11f92fb6759ed9438707153e7e0ada684cad01fd218a49a", size = 107645 },
 ]
 
 [[package]]
